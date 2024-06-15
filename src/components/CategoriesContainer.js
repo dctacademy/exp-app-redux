@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import { startGetCategories } from '../actions/categories-action'
+import CategoriesList from './CategoriesList'
+import CategoryForm from './CategoryForm'
 export default function CategoriesContainer(){
     const dispatch = useDispatch() 
     const categories  = useSelector((state) => {
@@ -9,12 +11,14 @@ export default function CategoriesContainer(){
 
     useEffect(() => {
        dispatch(startGetCategories())
-    }, [])
+    }, [dispatch])
 
 
     return (
         <div>
             <h2>Listing Categories - { categories.data.length } </h2>
+            <CategoriesList data={categories.data} />
+            <CategoryForm />
         </div>
     )
 }
