@@ -1,5 +1,11 @@
 import { useState } from 'react' 
+import { startAddCategory } from '../actions/categories-action'
+import { useDispatch, useSelector} from 'react-redux'
 export default function CategoryForm(){
+    const dispatch = useDispatch()
+    const serverErrors = useSelector((state) => {
+        return state.categories.serverErrors
+    })
     const [name,setName] = useState('')
     const [clientErrors, setClientErrors] = useState({}) 
     const errors = {} 
@@ -10,16 +16,32 @@ export default function CategoryForm(){
     }
     const handleSubmit = (e) => {
         e.preventDefault()
+        const formData = {
+            name: name 
+        }
         runClientValidation() 
+        const resetForm = () => {
+            setName('')
+        }
         if(Object.keys(errors).length == 0) {
-            // dispatch()
-            
+            dispatch(startAddCategory(formData, resetForm))        
+            setClientErrors({})
         } else {
             setClientErrors(errors) 
         }
     }
     return (
         <div>
+            { serverErrors.length > 0 && (
+                <div>
+                    <h2>Server Errors</h2>
+                    <ul>
+                        { serverErrors.map((ele, i) => {
+                            return <li key={i}>{ ele.msg } </li>
+                        })} 
+                    </ul>
+                </div> 
+            )}
             <form onSubmit={handleSubmit}>
                 <label htmlFor='name'>
                     Enter Name
