@@ -1,5 +1,6 @@
 import { useState } from 'react' 
 import { startAddCategory } from '../actions/categories-action'
+import { toast } from 'react-toastify'
 import { useDispatch, useSelector} from 'react-redux'
 export default function CategoryForm(){
     const dispatch = useDispatch()
@@ -23,18 +24,19 @@ export default function CategoryForm(){
         const resetForm = () => {
             setName('')
         }
+
         if(Object.keys(errors).length == 0) {
-            dispatch(startAddCategory(formData, resetForm))        
-            setClientErrors({})
+            dispatch(startAddCategory(formData, resetForm)) 
+            setClientErrors({})           
         } else {
             setClientErrors(errors) 
         }
     }
     return (
-        <div>
+        <>
             { serverErrors.length > 0 && (
-                <div>
-                    <h2>Server Errors</h2>
+                <div className='alert alert-danger'>
+                    <b>Server Error</b>
                     <ul>
                         { serverErrors.map((ele, i) => {
                             return <li key={i}>{ ele.msg } </li>
@@ -43,14 +45,21 @@ export default function CategoryForm(){
                 </div> 
             )}
             <form onSubmit={handleSubmit}>
-                <label htmlFor='name'>
-                    Enter Name
-                </label> <br/> 
-                <input type="text" id="name" value={name} onChange={e => setName(e.target.value)} /> 
-                { clientErrors.name && <span>{ clientErrors.name }</span> }
-                <br /> 
-                <input type="submit" />
+                <div className="form-group">
+                    <label htmlFor='name' className='form-label'>
+                        Enter Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        value={name} 
+                        onChange={e => setName(e.target.value)} 
+                        className="form-control"    
+                    /> 
+                </div>
+                { clientErrors.name && <p className="text-danger">{ clientErrors.name }</p> }
+                <input type="submit" className="btn btn-primary" />
             </form>
-        </div>
+        </>
     )
 }

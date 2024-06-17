@@ -11,7 +11,15 @@ export default function CategoryItem(props){
             dispatch(startRemoveCategory(id))
         }
     }
-    return <li key={id}>{name} <button onClick={handleRemove}>remove</button></li>
+    return <li key={id} className='list-group-item'>
+        {name} 
+        <div className="btn-group float-end">
+            <button className='btn btn-outline-secondary'>edit</button>
+            <button className='btn btn-outline-info'>show</button>
+            <button onClick={handleRemove} className='btn btn-outline-danger'>remove</button>
+        </div>
+        
+    </li>
 }
 
 CategoryItem.propTypes = {

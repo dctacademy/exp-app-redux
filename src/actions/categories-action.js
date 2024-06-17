@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toastifySuccess, toastifyError } from '../utils/toastify'
 export const SET_CATEGORIES = "SET_CATEGORIES"
 export const REMOVE_CATEGORY = "REMOVE_CATEGORY"
 export const ADD_CATEGORY = "ADD_CATEGORY"
@@ -26,8 +27,10 @@ export const startRemoveCategory = (id) => {
             const response = await axios.delete(`http://localhost:3068/remove-category/${id}`)
             const result = response.data 
             dispatch(removeCategory(result._id))
+            toastifySuccess(`Successfully removed ${result.name}`)
         } catch(err) {
             alert(err)
+            toastifyError('Error removing category')
         }
     }
 }
@@ -35,7 +38,6 @@ export const startRemoveCategory = (id) => {
 const removeCategory = (id) => {
     return { type: REMOVE_CATEGORY, payload: id}
 }
-
 
 export const startAddCategory = (formData, resetForm) => {
     return async (dispatch) => {
@@ -45,8 +47,10 @@ export const startAddCategory = (formData, resetForm) => {
             dispatch(addCategory(result))
             dispatch(setErrors([]))
             resetForm()
+            toastifySuccess(`Successfully created ${result.name}`)
         } catch(err){ 
             dispatch(setErrors(err.response.data.errors))
+            toastifyError('Error adding a category')
         }
     }
 }

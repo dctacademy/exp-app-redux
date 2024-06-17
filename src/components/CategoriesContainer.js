@@ -15,10 +15,14 @@ export default function CategoriesContainer(){
 
 
     return (
-        <div>
+        <>
             <h2>Listing Categories - { categories.data.length } </h2>
-            <CategoriesList data={categories.data} />
-            <CategoryForm />
-        </div>
+            <div className="col-md-8">
+                <CategoriesList data={categories.data} />
+            </div>
+            <div className="col-md-4">
+                <CategoryForm />
+            </div>
+        </>
     )
 }
