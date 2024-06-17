@@ -3,6 +3,8 @@ import {useSelector, useDispatch} from 'react-redux'
 import { startGetCategories } from '../actions/categories-action'
 import CategoriesList from './CategoriesList'
 import CategoryForm from './CategoryForm'
+import CategoryEdit from './CategoryEdit'
+import CategoryShow from './CategoryShow'
 export default function CategoriesContainer(){
     const dispatch = useDispatch() 
     const categories  = useSelector((state) => {
@@ -23,6 +25,8 @@ export default function CategoriesContainer(){
             <div className="col-md-4">
                 <CategoryForm />
             </div>
+            { categories.editCategoryId && <CategoryEdit id={categories.editCategoryId} />}
+            { categories.showCategoryId && <CategoryShow id={categories.showCategoryId} />}
         </>
     )
 }

@@ -1,15 +1,20 @@
 import { useState } from 'react' 
-import { startAddCategory } from '../actions/categories-action'
-import { toast } from 'react-toastify'
+import { startAddCategory, startEditCategory } from '../actions/categories-action'
 import { useDispatch, useSelector} from 'react-redux'
-export default function CategoryForm(){
+export default function CategoryForm(props){
+    const { id, toggle } = props 
     const dispatch = useDispatch()
     const serverErrors = useSelector((state) => {
         return state.categories.serverErrors
     })
-    const [name,setName] = useState('')
+    const category = useSelector((state) => {
+        return state.categories.data.find(ele => ele._id == id )
+    })
+
+    const [name,setName] = useState(category ? category.name : '')
     const [clientErrors, setClientErrors] = useState({}) 
     const errors = {} 
+
     const runClientValidation = () => {
         if(name.trim().length == 0) {
             errors.name = 'Name can not be blank'
@@ -26,8 +31,13 @@ export default function CategoryForm(){
         }
 
         if(Object.keys(errors).length == 0) {
-            dispatch(startAddCategory(formData, resetForm)) 
-            setClientErrors({})           
+            if(category) { // update operation
+                dispatch(startEditCategory(category._id, formData, toggle))
+            } else { // add operation
+                dispatch(startAddCategory(formData, resetForm)) 
+                setClientErrors({})     
+            }
+                 
         } else {
             setClientErrors(errors) 
         }

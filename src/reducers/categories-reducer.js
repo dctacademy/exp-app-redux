@@ -1,8 +1,10 @@
-import { SET_CATEGORIES, REMOVE_CATEGORY, ADD_CATEGORY, SET_CATEGORY_ERRORS } from "../actions/categories-action"
+import { SET_CATEGORIES, REMOVE_CATEGORY, ADD_CATEGORY, SET_CATEGORY_ERRORS, SET_EDIT_CATEGORY_ID, UPDATE_CATEGORY, SET_SHOW_CATEGORY_ID} from "../actions/categories-action"
 
 const initialState = {
     data: [],
-    serverErrors: []
+    serverErrors: [], 
+    editCategoryId: null,
+    showCategoryId: null
 }
 
 const categoriesReducer  = (state = initialState, action) => {
@@ -18,6 +20,21 @@ const categoriesReducer  = (state = initialState, action) => {
         }
         case SET_CATEGORY_ERRORS: {
             return {...state, serverErrors: action.payload }
+        }
+        case SET_EDIT_CATEGORY_ID: {
+            return {...state, editCategoryId: action.payload }
+        }
+        case UPDATE_CATEGORY : { 
+            return { ...state, data: state.data.map((ele) => {
+                if(ele._id == action.payload._id) {
+                    return { ...action.payload}
+                } else {
+                    return {...ele}
+                }
+            })}
+        }
+        case SET_SHOW_CATEGORY_ID : { 
+            return {...state, showCategoryId: action.payload }
         }
         default: {
             return {...state}
